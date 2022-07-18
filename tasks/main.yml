@@ -2,12 +2,30 @@
 
 - name: ensure required packages
   ansible.builtin.package:
-    name: ['python3-pip', 'python3-scipy', 'scons', 'git', 'swig', 'fonts-freefont-ttf', 'libopenjp2-7']
+    name:
+      - python3-pip
+      - python3-scipy
+      - scons
+      - git
+      - swig
+      - fonts-freefont-ttf
+      - libopenjp2-7
     state: present
 
 - name: ensure pip requirements
   ansible.builtin.pip:
-    name: ['pytz','astral', 'feedparser', 'pillow', 'svgwrite', 'freetype-py', 'netifaces', 'monotonic', 'flask-restx', 'rpi-ws281x', 'coloredlogs']
+    name:
+      - pytz
+      - astral
+      - feedparser
+      - pillow
+      - svgwrite
+      - freetype-py
+      - netifaces
+      - monotonic
+      - flask-restx
+      - rpi-ws281x
+      - coloredlogs
     executable: pip3
 
 # Since we are using the python3 version of the clock (develop branch), it is not clear on how to configure the
@@ -23,7 +41,7 @@
 #   ansible.builtin.unarchive:
 #     src: "{{ wordclock_bcm2835_tar_url }}"
 #     dest: /home/pi
-#     remote_src: yes
+#     remote_src: true
 #     owner: pi
 #     group: pi
 #   register: bcm2835_libdir
@@ -74,7 +92,7 @@
     # repo: "https://github.com/bk1285/rpi_wordclock.git"
     dest: /home/pi/rpi_wordclock
     version: develop
-  become: yes
+  become: true
   become_user: pi
 
 - name: ensure wordclock configuration file
