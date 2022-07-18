@@ -1,0 +1,88 @@
+---
+
+- name: ensure required packages
+  ansible.builtin.package:
+    name: ['python3-pip', 'python3-scipy', 'scons', 'git', 'swig', 'fonts-freefont-ttf', 'python3-rpi.gpio']
+    state: present
+
+- name: ensure pip requirements
+  ansible.builtin.pip:
+    name: ['pytz', 'astral', 'feedparser', 'pillow', 'svgwrite', 'freetype-py', 'netifaces', 'monotonic', 'flask-restx', 'rpi-ws281x']
+    executable: pip3
+
+- name: ensure required packages for bcm2835 library
+  ansible.builtin.package:
+    name: ['build-essential', 'libcap2', 'libcap-dev']
+    state: present
+
+- name: download and extract bcm2835 library
+  ansible.builtin.unarchive:
+    src: "{{ wordclock_bcm2835_tar_url }}"
+    dest: /home/pi
+    remote_src: yes
+    owner: pi
+    group: pi
+  register: bcm2835_libdir
+
+- name: running make for bcm2835 library
+  ansible.builtin.command: make
+  args:
+    chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
+  when: bcm2835_libdir.changed
+
+- name: running make check for bcm2835 library
+  ansible.builtin.command: make check
+  args:
+    chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
+  when: bcm2835_libdir.changed
+
+- name: running make install for bcm2835 library
+  ansible.builtin.command: make install
+  args:
+    chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
+  when: bcm2835_libdir.changed
+
+- name: download and extract pywapi library
+  ansible.builtin.unarchive:
+    src: "{{ wordclock_pywapi_tar_url }}"
+    dest: /home/pi
+    remote_src: yes
+    owner: pi
+    group: pi
+  register: pywapi_libdir
+
+- name: running build for pywapi library
+  ansible.builtin.command: python setup.py build
+  args:
+    chdir: "/home/pi/pywapi-{{ wordclock_pywapi_version }}"
+  when: pywapi_libdir.changed
+
+- name: running install for pywapi library
+  ansible.builtin.command: python setup.py install
+  args:
+    chdir: "/home/pi/pywapi-{{ wordclock_pywapi_version }}"
+  when: pywapi_libdir.changed
+
+- name: clone wordclock repository
+  ansible.builtin.git:
+    repo: "https://github.com/phenze/rpi_wordclock.git"
+    # this would be the original repo, but no python3 support afaik
+    # repo: "https://github.com/bk1285/rpi_wordclock.git"
+    dest: /home/pi/rpi_wordclock
+    version: master-python3
+  become: yes
+  become_user: pi
+
+- name: ensure wordclock configuration file
+  ansible.builtin.copy:
+    src: wordclock_config.cfg
+    dest: /home/pi/rpi_wordclock/wordclock_config/wordclock_config.cfg
+    owner: pi
+    group: pi
+    mode: '0664'
+
+- name: enable wordclock start at reboot
+  ansible.builtin.cron:
+    name: "start wordclock"
+    special_time: reboot
+    job: "python3 /home/pi/rpi_wordclock/wordclock.py"
