@@ -1,7 +1,7 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Install and configure the RPi Wordclock from https://github.com/bk1285/rpi_wordclock/.
 
 Requirements
 ------------

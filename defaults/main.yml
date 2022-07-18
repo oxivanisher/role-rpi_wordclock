@@ -4,4 +4,3 @@ wordclock_bcm2835_version: "1.68"
 wordclock_bcm2835_tar_url: "http://www.airspayce.com/mikem/bcm2835/bcm2835-{{ wordclock_bcm2835_version }}.tar.gz"
 wordclock_pywapi_version: "0.3.8"
 wordclock_pywapi_tar_url: "https://launchpad.net/python-weather-api/trunk/{{ wordclock_pywapi_version }}/+download/pywapi-{{ wordclock_pywapi_version }}.tar.gz"
-
