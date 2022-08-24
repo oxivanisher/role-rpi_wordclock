@@ -91,7 +91,7 @@
     # this would be the original repo, but no python3 support afaik
     # repo: "https://github.com/bk1285/rpi_wordclock.git"
     dest: /home/pi/rpi_wordclock
-    version: develop
+    version: main
   become: true
   become_user: pi
 
