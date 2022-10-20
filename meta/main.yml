@@ -1,5 +1,6 @@
 galaxy_info:
   role_name: rpi_wordclock
+  namespace: oxivanisher
   author: Marc Urben
   description: Install and configure wordclock from https://github.com/bk1285/rpi_wordclock
   company: Thunderbluff

@@ -1,6 +1,6 @@
 ---
 
-- name: ensure required packages
+- name: Ensure required packages
   ansible.builtin.package:
     name:
       - python3-pip
@@ -12,7 +12,7 @@
       - libopenjp2-7
     state: present
 
-- name: ensure pip requirements
+- name: Ensure pip requirements
   ansible.builtin.pip:
     name:
       - pytz
@@ -32,12 +32,12 @@
 # temperature sensor. The following block was for the python 2 version and at some future date, it might be
 # supported and documented on the project homepage. Today I won't sink time into this, since I don't use
 # this sensor anyways.
-# - name: ensure required packages for bcm2835 library
+# - name: Ensure required packages for bcm2835 library
 #   ansible.builtin.package:
 #     name: ['build-essential', 'libcap2', 'libcap-dev']
 #     state: present
 
-# - name: download and extract bcm2835 library
+# - name: Download and extract bcm2835 library
 #   ansible.builtin.unarchive:
 #     src: "{{ wordclock_bcm2835_tar_url }}"
 #     dest: /home/pi
@@ -46,25 +46,25 @@
 #     group: pi
 #   register: bcm2835_libdir
 
-# - name: running make for bcm2835 library
+# - name: Running make for bcm2835 library
 #   ansible.builtin.command: make
 #   args:
 #     chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
 #   when: bcm2835_libdir.changed
 
-# - name: running make check for bcm2835 library
+# - name: Running make check for bcm2835 library
 #   ansible.builtin.command: make check
 #   args:
 #     chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
 #   when: bcm2835_libdir.changed
 
-# - name: running make install for bcm2835 library
+# - name: Running make install for bcm2835 library
 #   ansible.builtin.command: make install
 #   args:
 #     chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
 #   when: bcm2835_libdir.changed
 
-# - name: download and extract pywapi library
+# - name: Download and extract pywapi library
 #   ansible.builtin.unarchive:
 #     src: "{{ wordclock_pywapi_tar_url }}"
 #     dest: /home/pi
@@ -73,19 +73,19 @@
 #     group: pi
 #   register: pywapi_libdir
 
-# - name: running build for pywapi library
+# - name: Running build for pywapi library
 #   ansible.builtin.command: python setup.py build
 #   args:
 #     chdir: "/home/pi/pywapi-{{ wordclock_pywapi_version }}"
 #   when: pywapi_libdir.changed
 
-# - name: running install for pywapi library
+# - name: Running install for pywapi library
 #   ansible.builtin.command: python setup.py install
 #   args:
 #     chdir: "/home/pi/pywapi-{{ wordclock_pywapi_version }}"
 #   when: pywapi_libdir.changed
 
-- name: clone wordclock repository
+- name: Clone wordclock repository
   ansible.builtin.git:
     repo: "https://github.com/bk1285/rpi_wordclock.git"
     # this would be the original repo, but no python3 support afaik
@@ -95,7 +95,7 @@
   become: true
   become_user: pi
 
-- name: ensure wordclock configuration file
+- name: Ensure wordclock configuration file
   ansible.builtin.copy:
     src: wordclock_config.cfg
     dest: /home/pi/rpi_wordclock/wordclock_config/wordclock_config.cfg
@@ -103,7 +103,7 @@
     group: pi
     mode: '0664'
 
-- name: enable wordclock start at reboot
+- name: Enable wordclock start at reboot
   ansible.builtin.cron:
     name: "start wordclock"
     special_time: reboot
