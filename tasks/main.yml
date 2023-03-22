@@ -94,6 +94,9 @@
     version: main
   become: true
   become_user: pi
+  notify:
+    - Reload systemd
+    - Restart wordclock
 
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
@@ -102,9 +105,15 @@
     owner: pi
     group: pi
     mode: '0664'
+  notify:
+    - Reload systemd
+    - Restart wordclock
 
-- name: Enable wordclock start at reboot
-  ansible.builtin.cron:
-    name: "start wordclock"
-    special_time: reboot
-    job: "python3 /home/pi/rpi_wordclock/wordclock.py"
+- name: Ensure link for systemd unit
+  ansible.builtin.file:
+    src: /home/pi/rpi_wordclock/wordclock_config/wordclock.service
+    dest: /etc/systemd/system/wordclock.service
+    state: link
+  notify:
+    - Reload systemd
+    - Restart wordclock

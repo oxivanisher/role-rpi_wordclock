@@ -1,2 +1,12 @@
 ---
 # handlers file for rpi_wordclock
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart wordclock
+  ansible.builtin.systemd:
+    name: wordclock.service
+    state: restarted
+    enabled: true
