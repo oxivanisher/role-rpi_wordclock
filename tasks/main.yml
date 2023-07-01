@@ -3,6 +3,7 @@
   ansible.builtin.package:
     name:
       - python3-full
+      - python3-virtualenv
       - scons
       - git
       - swig
