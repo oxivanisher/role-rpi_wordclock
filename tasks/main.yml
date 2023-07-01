@@ -4,6 +4,7 @@
     name:
       - python3-full
       - python3-virtualenv
+      - cmake
       - scons
       - git
       - swig
@@ -99,6 +100,7 @@
     #   - flask-restx
     #   - rpi-ws281x
     #   - coloredlogs
+    virtualenv_site_packages: true
     virtualenv: "/home/{{ wordclock_user }}/rpi_wordclock/venv"
   become: true
   become_user: "{{ wordclock_user }}"
