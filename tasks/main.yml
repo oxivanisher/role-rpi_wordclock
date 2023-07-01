@@ -25,7 +25,6 @@
       - flask-restx
       - rpi-ws281x
       - coloredlogs
-    executable: pip3
     virtualenv: "/home/{{ wordclock_user }}/.local"
   become: true
   become_user: "{{ wordclock_user }}"
