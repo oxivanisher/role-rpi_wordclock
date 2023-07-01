@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure required packages
   ansible.builtin.package:
     name:
@@ -27,6 +26,9 @@
       - rpi-ws281x
       - coloredlogs
     executable: pip3
+    virtualenv: "/home/{{ wordclock_user }}/.local"
+  become: true
+  become_user: "{{ wordclock_user }}"
 
 # Since we are using the python3 version of the clock (develop branch), it is not clear on how to configure the
 # temperature sensor. The following block was for the python 2 version and at some future date, it might be
@@ -90,10 +92,10 @@
     repo: "https://github.com/bk1285/rpi_wordclock.git"
     # this would be the original repo, but no python3 support afaik
     # repo: "https://github.com/bk1285/rpi_wordclock.git"
-    dest: /home/pi/rpi_wordclock
+    dest: "/home/{{ wordclock_user }}/rpi_wordclock"
     version: main
   become: true
-  become_user: pi
+  become_user: "{{ wordclock_user }}"
   notify:
     - Reload systemd
     - Restart wordclock
@@ -101,17 +103,17 @@
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
     src: wordclock_config.cfg
-    dest: /home/pi/rpi_wordclock/wordclock_config/wordclock_config.cfg
-    owner: pi
-    group: pi
-    mode: '0664'
+    dest: "/home/{{ wordclock_user }}/rpi_wordclock/wordclock_config/wordclock_config.cfg"
+    owner: "{{ wordclock_user }}"
+    group: "{{ wordclock_user }}"
+    mode: "0664"
   notify:
     - Reload systemd
     - Restart wordclock
 
 - name: Ensure link for systemd unit
   ansible.builtin.file:
-    src: /home/pi/rpi_wordclock/wordclock_config/wordclock.service
+    src: "/home/{{ wordclock_user }}/rpi_wordclock/wordclock_config/wordclock.service"
     dest: /etc/systemd/system/wordclock.service
     state: link
   notify:
