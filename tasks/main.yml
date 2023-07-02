@@ -9,6 +9,10 @@
       - python3-pil
       - python3-werkzeug
       - python3-coloredlogs
+      - python3-astral
+      - python3-monotonic
+      - python3-netifaces
+      - python3-svgwrite
       - swig
       - fonts-freefont-ttf
       - libopenjp2-7
