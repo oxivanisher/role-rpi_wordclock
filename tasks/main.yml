@@ -3,15 +3,12 @@
   ansible.builtin.package:
     name:
       - python3-full
+      - python3-scipy
+      - python3-freetype
       - python3-virtualenv
-      - cmake
-      - scons
-      - git
       - swig
       - fonts-freefont-ttf
       - libopenjp2-7
-      - ninja-build
-      - libssl-dev
     state: present
 
 # Since we are using the python3 version of the clock (develop branch), it is not clear on how to configure the
