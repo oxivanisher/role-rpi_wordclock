@@ -8,6 +8,7 @@
       - python3-virtualenv
       - python3-pil
       - python3-werkzeug
+      - python3-coloredlogs
       - swig
       - fonts-freefont-ttf
       - libopenjp2-7
