@@ -111,6 +111,14 @@
   become: true
   become_user: "{{ wordclock_user }}"
 
+- name: Ensure safe.directory
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/git
+      - config --global
+      - --add safe.directory /home/pi/rpi_wordclock
+  changed_when: true
+
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
     src: wordclock_config.cfg
