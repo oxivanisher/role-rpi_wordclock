@@ -7,6 +7,7 @@
       - python3-freetype
       - python3-virtualenv
       - python3-pil
+      - python3-werkzeug
       - swig
       - fonts-freefont-ttf
       - libopenjp2-7
