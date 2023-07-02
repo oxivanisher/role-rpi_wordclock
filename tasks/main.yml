@@ -115,9 +115,11 @@
   ansible.builtin.command:
     argv:
       - /usr/bin/git
-      - config --global
-      - --add safe.directory /home/pi/rpi_wordclock
-  changed_when: true
+      - config
+      - --global
+      - --add
+      - safe.directory
+      - /home/pi/rpi_wordclock
 
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
