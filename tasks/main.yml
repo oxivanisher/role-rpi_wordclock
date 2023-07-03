@@ -120,6 +120,8 @@
       - --add
       - safe.directory
       - /home/pi/rpi_wordclock
+  changed_when: true
+  failed_when: false
 
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
