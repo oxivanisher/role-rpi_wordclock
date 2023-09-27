@@ -148,4 +148,4 @@
   ansible.builtin.cron:
     name: "Change wordclock to color cycling"
     special_time: reboot
-    job: 'sleep 20 && /usr/bin/curl -s "http://localhost/api/button" -H "Content-Type: application/json" --data-raw "{\"button\":\"right\"}" > /dev/null'
+    job: 'sleep 60 && /usr/bin/curl -s "http://localhost/api/button" -H "Content-Type: application/json" --data-raw "{\"button\":\"right\"}" > /dev/null'
