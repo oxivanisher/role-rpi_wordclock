@@ -111,7 +111,7 @@
   become: true
   become_user: "{{ wordclock_user }}"
 
-- name: Ensure safe.directory the diry way ... yes it generates changes
+- name: Ensure safe.directory the diry way ... yes it generates changes # noqa command-instead-of-module
   ansible.builtin.command:
     argv:
       - /usr/bin/git
