@@ -4,9 +4,13 @@
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
+  become: true
+  become_user: root
 
 - name: Restart wordclock
   ansible.builtin.systemd:
     name: wordclock.service
     state: restarted
     enabled: true
+  become: true
+  become_user: root

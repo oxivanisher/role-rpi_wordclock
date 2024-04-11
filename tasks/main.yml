@@ -17,6 +17,8 @@
       - fonts-freefont-ttf
       - libopenjp2-7
     state: present
+  become: true
+  become_user: root
 
 # Since we are using the python3 version of the clock (develop branch), it is not clear on how to configure the
 # temperature sensor. The following block was for the python 2 version and at some future date, it might be
@@ -122,6 +124,8 @@
       - /home/pi/rpi_wordclock
   changed_when: true
   failed_when: false
+  become: true
+  become_user: root
 
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
@@ -133,6 +137,8 @@
   notify:
     - Reload systemd
     - Restart wordclock
+  become: true
+  become_user: "{{ wordclock_user }}"
 
 - name: Ensure link for systemd unit
   ansible.builtin.file:
@@ -142,6 +148,8 @@
   notify:
     - Reload systemd
     - Restart wordclock
+  become: true
+  become_user: root
 
 # workaround for https://github.com/bk1285/rpi_wordclock/pull/231
 - name: Add dirty cron workaround for color change mode
@@ -149,3 +157,5 @@
     name: "Change wordclock to color cycling"
     special_time: reboot
     job: 'sleep 60 && /usr/bin/curl -s "http://localhost/api/button" -H "Content-Type: application/json" --data-raw "{\"button\":\"right\"}" > /dev/null'
+  become: true
+  become_user: "{{ wordclock_user }}"
