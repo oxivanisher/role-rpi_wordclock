@@ -31,7 +31,7 @@
 
 # - name: Download and extract bcm2835 library
 #   ansible.builtin.unarchive:
-#     src: "{{ wordclock_bcm2835_tar_url }}"
+#     src: "{{ rpi_wordclock_bcm2835_tar_url }}"
 #     dest: /home/pi
 #     remote_src: true
 #     owner: pi
@@ -41,24 +41,24 @@
 # - name: Running make for bcm2835 library
 #   ansible.builtin.command: make
 #   args:
-#     chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
+#     chdir: "/home/pi/bcm2835-{{ rpi_wordclock_bcm2835_version }}"
 #   when: bcm2835_libdir.changed
 
 # - name: Running make check for bcm2835 library
 #   ansible.builtin.command: make check
 #   args:
-#     chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
+#     chdir: "/home/pi/bcm2835-{{ rpi_wordclock_bcm2835_version }}"
 #   when: bcm2835_libdir.changed
 
 # - name: Running make install for bcm2835 library
 #   ansible.builtin.command: make install
 #   args:
-#     chdir: "/home/pi/bcm2835-{{ wordclock_bcm2835_version }}"
+#     chdir: "/home/pi/bcm2835-{{ rpi_wordclock_bcm2835_version }}"
 #   when: bcm2835_libdir.changed
 
 # - name: Download and extract pywapi library
 #   ansible.builtin.unarchive:
-#     src: "{{ wordclock_pywapi_tar_url }}"
+#     src: "{{ rpi_wordclock_pywapi_tar_url }}"
 #     dest: /home/pi
 #     remote_src: yes
 #     owner: pi
@@ -68,13 +68,13 @@
 # - name: Running build for pywapi library
 #   ansible.builtin.command: python setup.py build
 #   args:
-#     chdir: "/home/pi/pywapi-{{ wordclock_pywapi_version }}"
+#     chdir: "/home/pi/pywapi-{{ rpi_wordclock_pywapi_version }}"
 #   when: pywapi_libdir.changed
 
 # - name: Running install for pywapi library
 #   ansible.builtin.command: python setup.py install
 #   args:
-#     chdir: "/home/pi/pywapi-{{ wordclock_pywapi_version }}"
+#     chdir: "/home/pi/pywapi-{{ rpi_wordclock_pywapi_version }}"
 #   when: pywapi_libdir.changed
 
 - name: Clone wordclock repository
@@ -86,16 +86,16 @@
     # repo: "https://github.com/bk1285/rpi_wordclock.git"
     # version: main
 
-    dest: "/home/{{ wordclock_user }}/rpi_wordclock"
+    dest: "/home/{{ rpi_wordclock_user }}/rpi_wordclock"
   become: true
-  become_user: "{{ wordclock_user }}"
+  become_user: "{{ rpi_wordclock_user }}"
   notify:
     - Reload systemd
     - Restart wordclock
 
 - name: Ensure pip requirements
   ansible.builtin.pip:
-    requirements: /home/{{ wordclock_user }}/rpi_wordclock/requirements.txt
+    requirements: /home/{{ rpi_wordclock_user }}/rpi_wordclock/requirements.txt
     # name:
     #   - pytz
     #   - astral
@@ -109,9 +109,9 @@
     #   - rpi-ws281x
     #   - coloredlogs
     virtualenv_site_packages: true
-    virtualenv: "/home/{{ wordclock_user }}/rpi_wordclock/venv"
+    virtualenv: "/home/{{ rpi_wordclock_user }}/rpi_wordclock/venv"
   become: true
-  become_user: "{{ wordclock_user }}"
+  become_user: "{{ rpi_wordclock_user }}"
 
 - name: Ensure safe.directory the diry way ... yes it generates changes # noqa command-instead-of-module
   ansible.builtin.command:
@@ -130,19 +130,19 @@
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
     src: wordclock_config.cfg
-    dest: "/home/{{ wordclock_user }}/rpi_wordclock/wordclock_config/wordclock_config.cfg"
-    owner: "{{ wordclock_user }}"
-    group: "{{ wordclock_user }}"
+    dest: "/home/{{ rpi_wordclock_user }}/rpi_wordclock/wordclock_config/wordclock_config.cfg"
+    owner: "{{ rpi_wordclock_user }}"
+    group: "{{ rpi_wordclock_user }}"
     mode: "0664"
   notify:
     - Reload systemd
     - Restart wordclock
   become: true
-  become_user: "{{ wordclock_user }}"
+  become_user: "{{ rpi_wordclock_user }}"
 
 - name: Ensure link for systemd unit
   ansible.builtin.file:
-    src: "/home/{{ wordclock_user }}/rpi_wordclock/wordclock_config/wordclock.service"
+    src: "/home/{{ rpi_wordclock_user }}/rpi_wordclock/wordclock_config/wordclock.service"
     dest: /etc/systemd/system/wordclock.service
     state: link
   notify:
@@ -158,4 +158,4 @@
     special_time: reboot
     job: 'sleep 60 && /usr/bin/curl -s "http://localhost/api/button" -H "Content-Type: application/json" --data-raw "{\"button\":\"right\"}" > /dev/null'
   become: true
-  become_user: "{{ wordclock_user }}"
+  become_user: "{{ rpi_wordclock_user }}"
