@@ -16,6 +16,7 @@
       - swig
       - fonts-freefont-ttf
       - libopenjp2-7
+      - libpq-dev
     state: present
   become: true
   become_user: root
