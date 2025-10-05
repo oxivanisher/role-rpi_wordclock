@@ -13,6 +13,7 @@
       - python3-monotonic
       - python3-netifaces
       - python3-svgwrite
+      - python3-packaging
       - swig
       - fonts-freefont-ttf
       - libopenjp2-7
