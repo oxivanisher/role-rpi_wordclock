@@ -20,7 +20,6 @@
       - libpq-dev
     state: present
   become: true
-  become_user: root
 
 # Since we are using the python3 version of the clock (develop branch), it is not clear on how to configure the
 # temperature sensor. The following block was for the python 2 version and at some future date, it might be
@@ -127,7 +126,6 @@
   changed_when: true
   failed_when: false
   become: true
-  become_user: root
 
 - name: Ensure wordclock configuration file
   ansible.builtin.copy:
@@ -151,7 +149,6 @@
     - Reload systemd
     - Restart wordclock
   become: true
-  become_user: root
 
 # workaround for https://github.com/bk1285/rpi_wordclock/pull/231
 - name: Add dirty cron workaround for color change mode
